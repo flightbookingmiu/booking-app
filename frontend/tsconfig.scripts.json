@@ -1,0 +1,12 @@
+{
+    "extends": "./tsconfig.json", // Extend the base config
+    "compilerOptions": {
+      "module": "CommonJS", // Use CommonJS for Node.js
+      "moduleResolution": "node", // Use Node.js module resolution
+      "noEmit": false, // Allow emitting JavaScript files
+      "outDir": "./dist", // Output directory for compiled files
+      "isolatedModules": false // Disable isolated modules
+    },
+    "include": ["src/scripts/**/*.ts"], // Include only script files
+    "exclude": ["node_modules"]
+  }
