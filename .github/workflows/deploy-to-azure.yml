@@ -1,0 +1,52 @@
+name: Deploy Java Backend to Azure
+
+on:
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Navigate to the backend subdirectory
+      - name: Navigate to backend directory
+        run: cd backend
+        shell: bash
+
+      # Set up Java 23
+      - name: Set up JDK 23
+        uses: actions/setup-java@v3
+        with:
+          java-version: '23'  # Use Java 23
+          distribution: 'temurin'
+
+      # Build the application with Maven
+      - name: Build with Maven
+        run: mvn clean package
+
+      # Log in to Azure
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Deploy to Azure App Service
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'flight-server'  # Replace with your App Service name
+          slot-name: 'production'
+          package: 'backend/target/*.jar'  # Path to your built JAR file (relative to the root)
+
+      # Configure environment variables for MySQL
+      - name: Set MySQL environment variables
+        run: |
+          echo "SPRING_DATASOURCE_URL=jdbc:mysql://flight-server.mysql.database.azure.com:3306/flightbookingdb?useSSL=true" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_USERNAME=fbadmin@flight-server" >> $GITHUB_ENV
+          echo "SPRING_DATASOURCE_PASSWORD=Marvelyiky@1985" >> $GITHUB_ENV
