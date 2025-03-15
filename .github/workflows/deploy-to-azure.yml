@@ -16,7 +16,7 @@ jobs:
 
       # Navigate to the backend subdirectory
       - name: Navigate to backend directory
-        run: cd backend
+        working-directory: ./backend  # Set the working directory to the backend subdirectory
         shell: bash
 
       # Set up Java 23
@@ -28,6 +28,7 @@ jobs:
 
       # Build the application with Maven
       - name: Build with Maven
+        working-directory: ./backend  # Ensure Maven runs in the backend directory
         run: mvn clean package
 
       # Log in to Azure
@@ -35,6 +36,11 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Set the Azure subscription
+      - name: Set Azure subscription
+        run: |
+          az account set --subscription e9a7b959-3592-43a8-8745-a90df32e1ad1
 
       # Deploy to Azure App Service
       - name: Deploy to Azure App Service
