@@ -1,0 +1,10 @@
+{
+  "/page": "app/page.js",
+  "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
+  "/api/flights/route": "app/api/flights/route.js",
+  "/api/auth/login/page": "app/api/auth/login/page.js",
+  "/flights/[id]/page": "app/flights/[id]/page.js",
+  "/api/flights/[id]/route": "app/api/flights/[id]/route.js",
+  "/booking/page": "app/booking/page.js",
+  "/api/bookings/route": "app/api/bookings/route.js"
+}
