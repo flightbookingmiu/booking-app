@@ -1,6 +1,7 @@
 package edu.miu.cs.cs425.backend.presentation.controller;
 
 import edu.miu.cs.cs425.backend.domain.entity.User;
+import edu.miu.cs.cs425.backend.dto.UserCreationRequest;
 import edu.miu.cs.cs425.backend.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -9,10 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000"}, allowedHeaders = "*", allowCredentials = "true")
 @Tag(name = "User API", description = "Endpoints for managing users")
 public class UserController {
     private final UserService userService;
@@ -21,11 +24,20 @@ public class UserController {
         this.userService = userService;
     }
 
-    @Operation(summary = "Create a new user", description = "Creates a new user with a unique ID")
+    @Operation(summary = "Create a new user", description = "Creates a new user with a unique ID and specified roles")
     @ApiResponse(responseCode = "201", description = "User created successfully")
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
+    public ResponseEntity<User> createUser(@RequestBody UserCreationRequest request) {
+        User user = new User();
+        user.setId(request.id() != null && !request.id().trim().isEmpty() ? request.id() : UUID.randomUUID().toString());
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setPassword(request.password());
+        user.setPhone(request.phone());
+        user.setAddress(request.address());
+        user.setAvatar(request.avatar() != null ? request.avatar() : "/profiles/default-avatar.jpg");
+
+        User createdUser = userService.createUser(user, request.roles() != null ? request.roles() : Set.of("USER"));
         return ResponseEntity.status(201).body(createdUser);
     }
 
@@ -70,12 +82,14 @@ public class UserController {
         }
     }
 
-    @Operation(summary = "Search users by email", description = "Retrieves users with emails matching the given pattern")
-    @ApiResponse(responseCode = "200", description = "List of matching users retrieved successfully")
+    @Operation(summary = "Find user by email", description = "Retrieves a single user by exact email match")
+    @ApiResponse(responseCode = "200", description = "User retrieved successfully")
+    @ApiResponse(responseCode = "404", description = "User not found")
     @GetMapping("/search/email")
-    public ResponseEntity<List<User>> findUsersByEmail(@RequestParam String email) {
-        List<User> users = userService.findUsersByEmail(email);
-        return ResponseEntity.ok(users);
+    public ResponseEntity<User> findUserByEmail(@RequestParam String email) {
+        return userService.findUserByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Operation(summary = "Search users by name", description = "Retrieves users with names matching the given pattern")

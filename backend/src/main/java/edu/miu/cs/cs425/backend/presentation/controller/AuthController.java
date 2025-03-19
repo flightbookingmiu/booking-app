@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:1"}, allowedHeaders = "*", allowCredentials = "true")
 @Tag(name = "Authentication", description = "Endpoints for user authentication")
 public class AuthController {
 

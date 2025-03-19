@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/booking")
-@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:1"}, allowedHeaders = "*", allowCredentials = "true")
 @Tag(name = "Booking API", description = "Endpoints for managing flight bookings")
 public class BookingController {
 
@@ -85,5 +85,29 @@ public class BookingController {
             return ResponseEntity.ok(bookings); // Return empty list instead of 404 for consistency
         }
         return ResponseEntity.ok(bookings);
+    }
+
+    @Operation(summary = "Get all bookings", description = "Retrieves a list of all bookings")
+    @ApiResponse(responseCode = "200", description = "List of bookings retrieved successfully")
+    @GetMapping("/all")
+    public ResponseEntity<List<Booking>> getAllBookings() {
+        List<Booking> bookings = bookingQueryHandler.getAllBookings();
+        return ResponseEntity.ok(bookings);
+    }
+
+    @Operation(summary = "Update a booking", description = "Updates an existing booking")
+    @ApiResponse(responseCode = "200", description = "Booking updated successfully")
+    @PutMapping("/{id}")
+    public ResponseEntity<Booking> updateBooking(@PathVariable Long id, @RequestBody Booking bookingDetails) {
+        Booking updatedBooking = bookingCommandHandler.updateBooking(id, bookingDetails);
+        return ResponseEntity.ok(updatedBooking);
+    }
+
+    @Operation(summary = "Delete a booking", description = "Deletes a booking by its ID")
+    @ApiResponse(responseCode = "204", description = "Booking deleted successfully")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
+        bookingCommandHandler.deleteBooking(id);
+        return ResponseEntity.noContent().build();
     }
 }

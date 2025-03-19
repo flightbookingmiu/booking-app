@@ -98,7 +98,11 @@ public class BookingQueryHandler {
     }
 
     public List<Booking> getBookingsByUserId(String userId) {
-
         return bookingRepository.findByUserId(userId);
+    }
+
+    // Added method to fetch all bookings for admin use
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
     }
 }

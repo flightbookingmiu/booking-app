@@ -1,9 +1,9 @@
 package edu.miu.cs.cs425.backend.domain.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class User {
@@ -17,7 +17,16 @@ public class User {
     private String avatar;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private String role; // Added for role-based access (e.g., "USER", "ADMIN")
+
+    // Many-to-Many relationship with Role
+    @ManyToMany(fetch = FetchType.EAGER) // Eager fetching for roles
+    @JoinTable(
+            name = "user_roles", // Name of the join table
+            joinColumns = @JoinColumn(name = "user_id"), // Foreign key for User
+            inverseJoinColumns = @JoinColumn(name = "role_id") // Foreign key for Role
+    )
+    private Set<Role> roles = new HashSet<>();
+
     // No-args constructor
     public User() {
     }
@@ -95,13 +104,25 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public String getRole() {
-        return role;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
+
+    // Helper methods to manage roles
+    public void addRole(Role role) {
+        this.roles.add(role);
+        role.getUsers().add(this);
+    }
+
+    public void removeRole(Role role) {
+        this.roles.remove(role);
+        role.getUsers().remove(this);
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -114,6 +135,7 @@ public class User {
                 ", avatar='" + avatar + '\'' +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", roles=" + roles +
                 '}';
     }
 }

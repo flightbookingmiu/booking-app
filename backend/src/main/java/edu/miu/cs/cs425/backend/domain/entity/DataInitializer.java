@@ -4,6 +4,7 @@ import edu.miu.cs.cs425.backend.data.repository.AirlineRepository;
 import edu.miu.cs.cs425.backend.data.repository.AirportRepository;
 import edu.miu.cs.cs425.backend.data.repository.BookingRepository;
 import edu.miu.cs.cs425.backend.data.repository.FlightRepository;
+import edu.miu.cs.cs425.backend.data.repository.RoleRepository;
 import edu.miu.cs.cs425.backend.data.repository.UserRepository;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final FlightRepository flightRepository;
     private final BookingRepository bookingRepository;
+    private final RoleRepository roleRepository;
 
     private final List<String> countries = Arrays.asList("USA", "Canada", "UK", "France");
     private final List<String> cities = Arrays.asList("New York", "Toronto", "London", "Paris");
@@ -38,12 +40,13 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     public DataInitializer(AirlineRepository airlineRepository, AirportRepository airportRepository,
                            UserRepository userRepository, FlightRepository flightRepository,
-                           BookingRepository bookingRepository) {
+                           BookingRepository bookingRepository, RoleRepository roleRepository) {
         this.airlineRepository = airlineRepository;
         this.airportRepository = airportRepository;
         this.userRepository = userRepository;
         this.flightRepository = flightRepository;
         this.bookingRepository = bookingRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -53,6 +56,15 @@ public class DataInitializer implements CommandLineRunner {
         userRepository.deleteAll();
         flightRepository.deleteAll();
         bookingRepository.deleteAll();
+        roleRepository.deleteAll(); // Clear roles table
+
+        // Populate Roles
+        List<Role> roles = new ArrayList<>();
+        Role userRole = new Role("USER");
+        Role adminRole = new Role("ADMIN");
+        roles.add(userRole);
+        roles.add(adminRole);
+        roleRepository.saveAll(roles);
 
         // Populate Airlines (minimal set)
         List<Airline> airlines = new ArrayList<>();
@@ -77,14 +89,29 @@ public class DataInitializer implements CommandLineRunner {
         }
         airportRepository.saveAll(airports);
 
-        // Populate Users (minimal: 1 user)
+        // Populate Users (minimal: 1 user with roles)
         List<User> users = new ArrayList<>();
         User user = new User();
         user.setId(UUID.randomUUID().toString());
-        user.setName("John Doe");
-        user.setEmail("john.doe@example.com");
-        user.setPassword(BCrypt.hashpw("password123", BCrypt.gensalt()));
+        user.setName("Mercel Vubangsi");
+        user.setEmail("vmercel@gmail.com");
+        user.setPassword(BCrypt.hashpw("marvel", BCrypt.gensalt()));
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        User user2 = new User();
+        user2.setId(UUID.randomUUID().toString());
+        user2.setName("Darian Kezong");
+        user2.setEmail("vmercel@outlook.fr");
+        user2.setPassword(BCrypt.hashpw("marvel", BCrypt.gensalt()));
+        user2.setCreatedAt(LocalDateTime.now());
+        user2.setUpdatedAt(LocalDateTime.now());
+        // Assign roles
+        user.addRole(userRole); // Add USER role
+        user.addRole(adminRole); // Add ADMIN role
+        user2.addRole(adminRole); // Add ADMIN role
         users.add(user);
+        users.add(user2);
         userRepository.saveAll(users);
 
         // Populate Flights with explicit JFK to LHR cases (March 12, 2025)
@@ -152,6 +179,7 @@ public class DataInitializer implements CommandLineRunner {
         System.out.println("Airlines: " + airlines.size());
         System.out.println("Airports: " + airports.size());
         System.out.println("Users: " + users.size());
+        System.out.println("Roles: " + roles.size());
         System.out.println("Flights: " + flights.size());
         System.out.println("\nJFK to LHR Explicit Entries (March 12, 2025):");
         System.out.println("Direct (No Legs):");

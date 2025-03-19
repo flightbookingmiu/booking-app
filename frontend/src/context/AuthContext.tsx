@@ -1,97 +1,60 @@
-'use client';
+// src/context/AuthContext.tsx
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-import { createContext, useContext, useState, ReactNode } from 'react';
+interface Role {
+  id: string;
+  name: string; // Assuming the string represents the role name
+}
 
-type User = {
+interface User {
+  id?: string;
   name: string;
-  email: string;
-  phone: string;
-  address: string;
-  passportNumber: string;
-  avatar?: string;
-};
+  email?: string;
+  phone?: string;
+  address?: string;
+  avatarUrl: string;
+  createdAt?: string;
+  updatedAt?: string;
+  roles?: Role[]; // Updated to an array of Role objects
+}
 
-type AuthContextType = {
-  isLoggedIn: boolean;
+interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string, phone: string, address: string, avatar?: string) => Promise<void>;
+  login: (userData: User) => void;
   logout: () => void;
-  checkEmailExists: (email: string) => Promise<boolean>;
-};
+  isLoggedIn: boolean;
+}
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const apiUrlStem = import.meta.env.VITE_API_URL;
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null);
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('token'));
 
-  const checkEmailExists = async (email: string): Promise<boolean> => {
-    // Implement a real API call to check if the email exists
-    try {
-      const response = await fetch(`/api/auth/check-email?email=${email}`);
-      const data = await response.json();
-      return data.exists; // Adjust based on your API response structure
-    } catch (error) {
-      console.error('Error checking email:', error);
-      return false;
-    }
-  };
-
-// src/app/auth/AuthContext.tsx (updated login function)
-const login = async (email: string, password: string) => {
-  try {
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
-    });
-    const data = await response.json();
-
-    if (response.ok) {
-      setIsLoggedIn(true);
-      setUser(data.user);
-      window.localStorage.setItem('authToken', data.token); // Store token
+  useEffect(() => {
+    if (isLoggedIn && user) {
+      localStorage.setItem('user', JSON.stringify(user));
+      // Uncomment and replace with real token logic when integrated
+      // localStorage.setItem('token', 'mock-token');
     } else {
-      throw new Error(data.error || 'Login failed');
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
     }
-  } catch (error) {
-    console.error('Login error:', error);
-    throw error;
-  }
-};
+  }, [user, isLoggedIn]);
 
-  const signup = async (name: string, email: string, password: string, phone: string, address: string, avatar?: string) => {
-    try {
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, phone, address, avatar }),
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        setIsLoggedIn(true);
-        setUser(data.user); // Adjust based on your API response structure
-      } else {
-        throw new Error(data.error || 'Signup failed');
-      }
-    } catch (error) {
-      console.error('Signup error:', error);
-      throw error; // Rethrow error to be handled in the component
-    }
+  const login = (userData: User) => {
+    setUser(userData);
+    setIsLoggedIn(true);
   };
 
   const logout = () => {
-    setIsLoggedIn(false);
     setUser(null);
-    localStorage.removeItem('authToken');
+    setIsLoggedIn(false);
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, user, login, signup, logout, checkEmailExists }}
-    >
+    <AuthContext.Provider value={{ user, login, logout, isLoggedIn }}>
       {children}
     </AuthContext.Provider>
   );

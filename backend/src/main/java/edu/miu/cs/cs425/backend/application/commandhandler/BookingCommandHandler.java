@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BookingCommandHandler {
@@ -25,7 +26,6 @@ public class BookingCommandHandler {
         this.bookingRepository = bookingRepository;
         this.flightRepository = flightRepository;
     }
-
 
     @Transactional
     public Booking handle(CreateBookingCommand command) {
@@ -70,5 +70,66 @@ public class BookingCommandHandler {
         }
 
         return bookingRepository.save(booking);
+    }
+
+    // Added method to update a booking
+    @Transactional
+    public Booking updateBooking(Long id, Booking bookingDetails) {
+        Optional<Booking> optionalBooking = bookingRepository.findById(id);
+        if (!optionalBooking.isPresent()) {
+            throw new IllegalArgumentException("Booking with ID " + id + " not found");
+        }
+
+        Booking existingBooking = optionalBooking.get();
+        existingBooking.setUserId(bookingDetails.getUserId());
+        existingBooking.setTotalPrice(bookingDetails.getTotalPrice());
+        existingBooking.setFareType(bookingDetails.getFareType());
+        existingBooking.setUserDetails(bookingDetails.getUserDetails());
+        existingBooking.setSelectedSeat(bookingDetails.getSelectedSeat());
+        existingBooking.setStatus(bookingDetails.getStatus());
+
+        // Update flight legs if provided
+        if (bookingDetails.getFlightLegs() != null && !bookingDetails.getFlightLegs().isEmpty()) {
+            List<FlightLeg> updatedFlightLegs = new ArrayList<>();
+            for (int i = 0; i < bookingDetails.getFlightLegs().size(); i++) {
+                FlightLeg legDetails = bookingDetails.getFlightLegs().get(i);
+                String flightId = legDetails.getFlight().getId();
+                Flight flight = flightRepository.findById(flightId)
+                        .orElseThrow(() -> new IllegalArgumentException("Flight not found: " + flightId));
+                FlightLeg leg = new FlightLeg();
+                leg.setFlight(flight);
+                leg.setLegNumber(i + 1);
+                updatedFlightLegs.add(leg);
+            }
+            existingBooking.setFlightLegs(updatedFlightLegs);
+        }
+
+        // Update return flight legs if provided
+        if (bookingDetails.getReturnFlightLegs() != null) {
+            List<FlightLeg> updatedReturnLegs = new ArrayList<>();
+            for (int i = 0; i < bookingDetails.getReturnFlightLegs().size(); i++) {
+                FlightLeg legDetails = bookingDetails.getReturnFlightLegs().get(i);
+                String flightId = legDetails.getFlight().getId();
+                Flight flight = flightRepository.findById(flightId)
+                        .orElseThrow(() -> new IllegalArgumentException("Flight not found: " + flightId));
+                FlightLeg leg = new FlightLeg();
+                leg.setFlight(flight);
+                leg.setLegNumber(i + 1);
+                updatedReturnLegs.add(leg);
+            }
+            existingBooking.setReturnFlightLegs(updatedReturnLegs);
+        }
+
+        existingBooking.setUpdatedAt(LocalDateTime.now());
+        return bookingRepository.save(existingBooking);
+    }
+
+    // Added method to delete a booking
+    @Transactional
+    public void deleteBooking(Long id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new IllegalArgumentException("Booking with ID " + id + " not found");
+        }
+        bookingRepository.deleteById(id);
     }
 }
