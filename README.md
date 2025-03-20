@@ -220,7 +220,7 @@ Date: March 19, 2025
   - Solution: Configured global CORS in SecurityConfig to allow `http://flight-app.s3-website-us-east-1.amazonaws.com`.  
 
 **Screenshot Placeholder**:  
-![API Documentation](screenshots/api-docs.png)  
+![API Documentation](screenshots/flights.png)  
 *Note*: Show Swagger UI with endpoints like `/api/flights`.
 
 ---
@@ -290,7 +290,7 @@ Date: March 19, 2025
   - Backend: Configured CORS and Spring Security.  
 
 **Screenshot Placeholder**:  
-![Deployment Dashboard](screenshots/deployment-dashboard.png)
+![Deployment Dashboard](screenshots/deployment.png)
 
 ---
 
@@ -304,7 +304,7 @@ Date: March 19, 2025
   - Tests: Unit tests for backend (JUnit), frontend tests (Jest).  
 
 **Diagram Placeholder**:  
-![CI-CD Pipeline](screenshots/ci-cd-pipeline.png)  
+![CI-CD Pipeline](screenshots/cicd.png)  
 *Note*: Include a flowchart showing the CI/CD pipeline stages (build, test, deploy).
 
 ---
@@ -350,7 +350,7 @@ Date: March 19, 2025
 - Add notifications for booking confirmations and complaint updates.  
 
 **Screenshot Placeholder**:  
-![Roadmap](screenshots/roadmap.png)
+![Roadmap](screenshots/gantt.png)
 
 ---
 
