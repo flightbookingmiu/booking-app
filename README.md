@@ -368,8 +368,3 @@ Date: March 19, 2025
 
 ---
 
-## Additional Notes
-- **Visual Consistency**: Use a consistent slide template with the XAI Travel logo on each slide.  
-- **Screenshots and Diagrams**: Place all images in the `screenshots/` folder for inline rendering.  
-- **Preparation**: Rehearse to stay within the 40-minute presentation time, followed by 5-10 minutes for Q&A.  
-- **Handouts**: Provide a PDF of the slides and a one-page summary of the app’s features, architecture, and SDLC process.
