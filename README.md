@@ -8,7 +8,7 @@ This document serves as the presentation script for the **XAI Travel** applicati
 
 ## 1. Introduction and SDLC Overview (Presented by Sahid - Solutions Architect)
 
-### Slide 1: Title Slide
+###  1: Title 
 **XAI Travel: A Modern Flight Booking and Management System**  
 A Full-Stack Solution for Seamless Travel Experiences  
 Presenters: Sahid (Solutions Architect), Williams (Backend Engineer), Mercel (Frontend Engineer), Kanchan (DevOps Engineer)  
@@ -19,7 +19,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 2: Introduction to XAI Travel
+###  2: Introduction to XAI Travel
 **Introduction to XAI Travel**  
 - XAI Travel is a web-based platform designed to simplify flight booking and management for users while providing robust administrative tools for airline staff.  
 - Built as a full-stack application with a React frontend and Spring Boot backend.  
@@ -30,7 +30,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 3: SDLC Overview
+###  3: SDLC Overview
 **Software Development Life Cycle (SDLC)**  
 - **Planning**: Define project goals, scope, and feasibility.  
 - **Requirements Analysis**: Gather and analyze user requirements and use cases.  
@@ -48,7 +48,7 @@ Date: March 19, 2025
 
 ## 2. Planning and Requirements Analysis (Presented by Sahid - Solutions Architect)
 
-### Slide 4: Planning Phase
+###  4: Planning Phase
 **Planning Phase**  
 - **Objective**: Build a scalable flight booking and management system.  
 - **Scope**:  
@@ -65,7 +65,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 5: Problem Scenario (Requirements Analysis)
+###  5: Problem Scenario (Requirements Analysis)
 **Problem Scenario**  
 - **User Pain Points**:  
   - Difficulty in finding and booking flights with clear pricing and availability.  
@@ -82,7 +82,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 6: Use Cases and User Stories (Requirements Analysis)
+###  6: Use Cases and User Stories (Requirements Analysis)
 **Use Cases and User Stories**  
 - Identified use cases for two primary user roles: **Travelers** and **Admins**.  
 
@@ -104,7 +104,7 @@ Date: March 19, 2025
 
 ## 3. Design Phase (Presented by Williams - Backend Engineer)
 
-### Slide 7: Solution Architecture
+###  7: Solution Architecture
 **Solution Architecture**  
 - **Frontend**: React with TypeScript, Material-UI, hosted on AWS S3 as a static website.  
 - **Backend**: Spring Boot with JPA, MySQL database, deployed on AWS EC2.  
@@ -125,7 +125,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 8: Domain Model (Class Diagram)
+###  8: Domain Model (Class Diagram)
 **Domain Model: Class Diagram**  
 - **Entities**:  
   - User: id, name, email, password, roles, etc.  
@@ -148,7 +148,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 9: Database Design Model (E-R Diagram)
+###  9: Database Design Model (E-R Diagram)
 **Database Design: E-R Diagram**  
 - **Tables**:  
   - users: id, name, email, password, phone, address, avatar, created_at, updated_at  
@@ -168,7 +168,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 10: Sequence Diagram (Book a Flight)
+###  10: Sequence Diagram (Book a Flight)
 **Sequence Diagram: Booking a Flight**  
 - **Actors**: Traveler, Frontend (React), Backend (Spring Boot), Database  
 - **Steps**:  
@@ -187,7 +187,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 11: Software Design Patterns and Principles
+###  11: Software Design Patterns and Principles
 **Software Design Patterns and Principles**  
 - **Design Patterns**:  
   - Command Pattern: Used in BookingCommandHandler with CreateBookingCommand.  
@@ -208,7 +208,7 @@ Date: March 19, 2025
 
 ## 4. Implementation Phase (Presented by Williams - Backend Engineer and Mercel - Frontend Engineer)
 
-### Slide 12: Backend Implementation (Williams)
+###  12: Backend Implementation (Williams)
 **Backend Implementation**  
 - Built with Spring Boot, JPA, and MySQL.  
 - **Key Components**:  
@@ -225,7 +225,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 13: Frontend Implementation (Mercel)
+###  13: Frontend Implementation (Mercel)
 **Frontend Implementation**  
 - Built with React, TypeScript, and Material-UI.  
 - **Key Components**:  
@@ -239,11 +239,11 @@ Date: March 19, 2025
   - Solution: Added client-side validation.  
 
 **Screenshot Placeholder**:  
-![Management Dashboard](screenshots/management-dashboard.png)
+![Management Dashboard](screenshots/manage.png)
 
 ---
 
-### Slide 14: UI/UX Design (Mercel)
+###  14: UI/UX Design (Mercel)
 **UI/UX Design**  
 - Consistent theme (blue palette: #1e3c72, #2a5298).  
 - Responsive design with Material-UI components (e.g., Table, Dialog, Tabs).  
@@ -256,7 +256,7 @@ Date: March 19, 2025
 
 ## 5. Testing Phase (Presented by Kanchan)
 
-### Slide 15: Testing Strategy
+###  15: Testing Strategy
 **Testing Strategy**  
 - **Backend Testing (Kanchan)**:  
   - Unit Tests: Used JUnit to test controllers, services, and repositories (e.g., FlightControllerTest).  
@@ -270,14 +270,14 @@ Date: March 19, 2025
   - Frontend: 80% coverage.  
 
 **Screenshot Placeholder**:  
-![Test Report](screenshots/test-report.png)  
+![Test Report](screenshots/test.png)  
 *Note*: Show a test coverage report from JUnit or Jest.
 
 ---
 
 ## 6. Deployment Phase (Presented by Kanchan - DevOps Engineer)
 
-### Slide 16: Deployment Strategy
+###  16: Deployment Strategy
 **Deployment Strategy**  
 - **Frontend**: Deployed on Amazon S3 as a static website.  
   - Build command: `npm run build`.  
@@ -294,7 +294,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 17: CI/CD Pipeline
+###  17: CI/CD Pipeline
 **CI/CD Pipeline**  
 - **Tools**: GitHub Actions.  
 - **Pipeline**:  
@@ -311,7 +311,7 @@ Date: March 19, 2025
 
 ## 7. Maintenance Phase + JUnit, Integration Testing (Presented by Kanchan - DevOps Engineer)
 
-### Slide 18: Environment Setup and Monitoring
+###  18: Environment Setup and Monitoring
 **Environment Setup and Monitoring**  
 - **Development**: Local setup with `localhost:3000` (frontend) and `localhost:8080` (backend).  
 - **Production**: Configured environment variables (e.g., `VITE_API_URL`, database credentials).  
@@ -323,7 +323,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 19: Security
+###  19: Security
 **Security**  
 - HTTPS for all API calls (configured via Nginx on EC2).  
 - JWT token stored in localStorage (plan to use HttpOnly cookies in future).  
@@ -333,7 +333,7 @@ Date: March 19, 2025
 
 ## 8. Conclusion and Future Work (Presented by Sahid - Solutions Architect)
 
-### Slide 20: Summary
+###  20: Summary
 **Conclusion**  
 - XAI Travel successfully followed the SDLC to deliver a user-friendly, secure, and scalable flight booking system.  
 - Key features: Flight search, booking, and admin management.  
@@ -341,7 +341,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 21: Future Work (Maintenance Phase)
+###  21: Future Work (Maintenance Phase)
 **Future Work**  
 - Implement the complaints backend (ComplaintController).  
 - Add pagination and filtering to the management dashboard.  
@@ -354,7 +354,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 22: Closing
+###  22: Closing
 **Closing**  
 - Thank you for your attention!  
 - We welcome your questions.  
