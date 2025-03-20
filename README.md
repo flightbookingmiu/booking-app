@@ -14,7 +14,7 @@ A Full-Stack Solution for Seamless Travel Experiences
 Presenters: Sahid (Solutions Architect), Williams (Backend Engineer), Mercel (Frontend Engineer), Kanchan (DevOps Engineer)  
 Date: March 19, 2025  
 
-**Screenshot Placeholder**:  
+  
 ![XAI Travel Logo](screenshots/logo.png)
 
 ---
@@ -25,7 +25,7 @@ Date: March 19, 2025
 - Built as a full-stack application with a React frontend and Spring Boot backend.  
 - Developed following the Software Development Life Cycle (SDLC) to ensure a structured and efficient process.  
 
-**Screenshot Placeholder**:  
+  
 ![App Overview](screenshots/overview.png)
 
 ---
@@ -77,7 +77,7 @@ Date: March 19, 2025
   - A user-friendly, secure, and scalable solution for flight booking and management.  
   - Support for both end-users (travelers) and administrators (airline staff).  
 
-**Screenshot Placeholder**:  
+  
 ![Problem Scenario](screenshots/context.png)
 
 ---
@@ -143,7 +143,7 @@ Date: March 19, 2025
   - FlightLeg → Flight: Many-to-One  
   - Complaint → User, Complaint → Booking: Many-to-One  
 
-**Screenshot Placeholder**:  
+  
 ![Class Diagram](screenshots/class-diagram.png)
 
 ---
@@ -163,7 +163,7 @@ Date: March 19, 2025
 - **Relationships**:  
   - Foreign keys: flights.airline_id → airlines.id, flights.origin_id → airports.id, etc.  
 
-**Screenshot Placeholder**:  
+  
 ![E-R Diagram](screenshots/er-diagram.png)
 
 ---
@@ -182,7 +182,7 @@ Date: March 19, 2025
   8. Backend returns the created Booking to the frontend.  
   9. Frontend displays a confirmation to the traveler.  
 
-**Screenshot Placeholder**:  
+  
 ![Sequence Diagram](screenshots/sequence-diagram.png)
 
 ---
@@ -201,7 +201,7 @@ Date: March 19, 2025
   - DRY: Reused components (e.g., NavButton in frontend).  
   - KISS: Kept API design simple (RESTful endpoints).  
 
-**Screenshot Placeholder**:  
+  
 ![CQRS Pattern](screenshots/cqrs.png)
 
 ---
@@ -219,7 +219,7 @@ Date: March 19, 2025
   - Challenge: Handling CORS for S3-hosted frontend.  
   - Solution: Configured global CORS in SecurityConfig to allow `http://flight-app.s3-website-us-east-1.amazonaws.com`.  
 
-**Screenshot Placeholder**:  
+  
 ![API Documentation](screenshots/flights.png)  
 *Note*: Show Swagger UI with endpoints like `/api/flights`.
 
@@ -238,7 +238,7 @@ Date: March 19, 2025
   - Challenge: Form validation for flight creation.  
   - Solution: Added client-side validation.  
 
-**Screenshot Placeholder**:  
+  
 ![Management Dashboard](screenshots/manage.png)
 
 ---
@@ -249,8 +249,7 @@ Date: March 19, 2025
 - Responsive design with Material-UI components (e.g., Table, Dialog, Tabs).  
 - User feedback: Loading spinners, error alerts, confirmation dialogs.  
 
-**Screenshot Placeholder**:  
-![Flight Form](screenshots/flight-form.png)
+
 
 ---
 
@@ -269,7 +268,7 @@ Date: March 19, 2025
   - Backend: 85% coverage.  
   - Frontend: 80% coverage.  
 
-**Screenshot Placeholder**:  
+  
 ![Test Report](screenshots/test.png)  
 *Note*: Show a test coverage report from JUnit or Jest.
 
@@ -289,7 +288,7 @@ Date: March 19, 2025
   - Frontend: `VITE_API_URL=http://54.123.45.67:8080`.  
   - Backend: Configured CORS and Spring Security.  
 
-**Screenshot Placeholder**:  
+  
 ![Deployment Dashboard](screenshots/deployment.png)
 
 ---
@@ -318,8 +317,8 @@ Date: March 19, 2025
 - **Monitoring**: Used AWS CloudWatch for backend logs and metrics.  
 - **Scaling**: Configured auto-scaling on AWS EC2 to handle traffic spikes.  
 
-**Screenshot Placeholder**:  
-![CloudWatch Dashboard](screenshots/cloudwatch-dashboard.png)
+  
+![CloudWatch Dashboard](screenshots/cloudwatch.png)
 
 ---
 
@@ -349,7 +348,7 @@ Date: March 19, 2025
 - Integrate payment processing for bookings.  
 - Add notifications for booking confirmations and complaint updates.  
 
-**Screenshot Placeholder**:  
+  
 ![Roadmap](screenshots/gantt.png)
 
 ---
