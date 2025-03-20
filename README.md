@@ -1,3 +1,4 @@
+
 # XAI Travel Presentation
 
 ## Overview
@@ -96,7 +97,7 @@ Date: March 19, 2025
 - Resolve Complaints: As an admin, I want to view and resolve customer complaints, so I can improve satisfaction.  
 
 **Diagram Placeholder**:  
-![Use Case Diagram](screenshots/use-case-diagram.png)  
+![Use Case Diagram](screenshots/usecase.png)  
 *Note*: Include a use case diagram showing actors (Traveler, Admin) and use cases (Search Flights, Book Flight, Manage Flights, etc.) with relationships.
 
 ---
@@ -111,12 +112,16 @@ Date: March 19, 2025
 - **Infrastructure**: AWS services (S3, EC2, CloudWatch for monitoring, Auto Scaling for scalability).  
 
 **Diagram Placeholder**:  
-![Architecture Diagram](screenshots/architecture-diagram.png)  
+![Architecture Diagram](screenshots/architecture.png)  
 *Note*: Include a diagram showing:  
 - Frontend (React) on S3.  
 - Backend (Spring Boot) on EC2 with MySQL.  
 - API calls between frontend and backend.  
 - AWS services (CloudWatch, Auto Scaling) for monitoring and scaling.
+
+
+**Design Diagram**:  
+![Architecture Diagram](screenshots/design.png)  
 
 ---
 
@@ -249,11 +254,11 @@ Date: March 19, 2025
 
 ---
 
-## 5. Testing Phase (Presented by Williams and Mercel)
+## 5. Testing Phase (Presented by Kanchan)
 
 ### Slide 15: Testing Strategy
 **Testing Strategy**  
-- **Backend Testing (Williams)**:  
+- **Backend Testing (Kanchan)**:  
   - Unit Tests: Used JUnit to test controllers, services, and repositories (e.g., FlightControllerTest).  
   - Integration Tests: Tested API endpoints with MockMvc.  
   - Example: Tested POST /api/booking to ensure correct booking creation.  
@@ -304,7 +309,7 @@ Date: March 19, 2025
 
 ---
 
-## 7. Maintenance Phase (Presented by Kanchan - DevOps Engineer)
+## 7. Maintenance Phase + JUnit, Integration Testing (Presented by Kanchan - DevOps Engineer)
 
 ### Slide 18: Environment Setup and Monitoring
 **Environment Setup and Monitoring**  
