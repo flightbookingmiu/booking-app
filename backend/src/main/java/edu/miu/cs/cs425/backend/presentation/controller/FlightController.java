@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/flights")
-@CrossOrigin(origins = {"http://localhost:3000"}, allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000","http://flight-app.s3-website-us-east-1.amazonaws.com"}, allowedHeaders = "*", allowCredentials = "true")
 @Tag(name = "FlightRequest API", description = "Endpoints for managing flights")
 public class FlightController {
     private final FlightService flightService;

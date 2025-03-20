@@ -1,12 +1,11 @@
-
 # XAI Travel Presentation
 
 ## Overview
-This document serves as the presentation script for the **XAI Travel** application, a full-stack flight booking and management system. The presentation is delivered by four developers: Sahid (Solutions Architect), Williams (Backend Engineer), Mercel (Frontend Engineer), and Kanchan (DevOps Engineer). It covers the problem scenario, use cases, solution architecture, design models, and deployment strategies.
+This document serves as the presentation script for the **XAI Travel** application, a full-stack flight booking and management system. The presentation is delivered by four developers: Sahid (Solutions Architect), Williams (Backend Engineer), Mercel (Frontend Engineer), and Kanchan (DevOps Engineer). It covers the SDLC phases, solution architecture, design models, and deployment strategies.
 
 ---
 
-## 1. Introduction and Problem Scenario (Presented by Sahid - Solutions Architect)
+## 1. Introduction and SDLC Overview (Presented by Sahid - Solutions Architect)
 
 ### Slide 1: Title Slide
 **XAI Travel: A Modern Flight Booking and Management System**  
@@ -15,21 +14,57 @@ Presenters: Sahid (Solutions Architect), Williams (Backend Engineer), Mercel (Fr
 Date: March 19, 2025  
 
 **Screenshot Placeholder**:  
-![XAI Travel Logo](screenshots/xai-travel-logo.png)
+![XAI Travel Logo](screenshots/logo.png)
 
 ---
 
-### Slide 2: Introduction
+### Slide 2: Introduction to XAI Travel
 **Introduction to XAI Travel**  
 - XAI Travel is a web-based platform designed to simplify flight booking and management for users while providing robust administrative tools for airline staff.  
 - Built as a full-stack application with a React frontend and Spring Boot backend.  
+- Developed following the Software Development Life Cycle (SDLC) to ensure a structured and efficient process.  
 
 **Screenshot Placeholder**:  
-![App Overview](screenshots/app-overview.png)
+![App Overview](screenshots/overview.png)
 
 ---
 
-### Slide 3: Problem Scenario
+### Slide 3: SDLC Overview
+**Software Development Life Cycle (SDLC)**  
+- **Planning**: Define project goals, scope, and feasibility.  
+- **Requirements Analysis**: Gather and analyze user requirements and use cases.  
+- **Design**: Create system architecture, domain models, and database design.  
+- **Implementation**: Develop the frontend and backend components.  
+- **Testing**: Validate functionality through unit and integration tests.  
+- **Deployment**: Deploy the application to production environments.  
+- **Maintenance**: Monitor, scale, and plan future enhancements.  
+
+**Diagram Placeholder**:  
+![SDLC Diagram](screenshots/agile.png)  
+*Note*: Include a circular or linear diagram showing the SDLC phases with brief descriptions.
+
+---
+
+## 2. Planning and Requirements Analysis (Presented by Sahid - Solutions Architect)
+
+### Slide 4: Planning Phase
+**Planning Phase**  
+- **Objective**: Build a scalable flight booking and management system.  
+- **Scope**:  
+  - Core features: Flight search, booking, and admin management.  
+  - Target users: Travelers and airline administrators.  
+- **Feasibility**:  
+  - Technical: Feasible with React, Spring Boot, and AWS.  
+  - Economic: Cost-effective using open-source tools and cloud infrastructure.  
+- **Team Roles**:  
+  - Sahid: Solutions Architect (architecture and requirements).  
+  - Williams: Backend Engineer (API and database).  
+  - Mercel: Frontend Engineer (UI/UX).  
+  - Kanchan: DevOps Engineer (deployment and CI/CD).  
+
+---
+
+### Slide 5: Problem Scenario (Requirements Analysis)
 **Problem Scenario**  
 - **User Pain Points**:  
   - Difficulty in finding and booking flights with clear pricing and availability.  
@@ -42,70 +77,50 @@ Date: March 19, 2025
   - Support for both end-users (travelers) and administrators (airline staff).  
 
 **Screenshot Placeholder**:  
-![Problem Scenario](screenshots/problem-scenario.png)
+![Problem Scenario](screenshots/context.png)
 
 ---
 
-### Slide 4: Project Goals
-**Project Goals**  
-- Provide an intuitive interface for users to search, book, and manage flights.  
-- Enable admins to manage flights, bookings, and complaints efficiently.  
-- Ensure scalability, security, and maintainability through modern software engineering practices.  
-
----
-
-## 2. Use Cases and User Stories (Presented by Sahid - Solutions Architect)
-
-### Slide 5: Use Cases Overview
+### Slide 6: Use Cases and User Stories (Requirements Analysis)
 **Use Cases and User Stories**  
-- Identified use cases for two primary user roles: **Travelers** (end-users) and **Admins**.  
+- Identified use cases for two primary user roles: **Travelers** and **Admins**.  
+
+**Traveler Use Cases**:  
+- Search Flights: As a traveler, I want to search for flights by specifying origin, destination, and travel dates, so I can find the best options.  
+- Book a Flight: As a traveler, I want to book a flight by selecting an itinerary, so I can secure my travel plans.  
+- View My Bookings: As a traveler, I want to view my bookings, so I can manage my travel plans.  
+
+**Admin Use Cases**:  
+- Manage Flights: As an admin, I want to create, update, and delete flights, so I can keep the flight catalog up-to-date.  
+- Manage Bookings: As an admin, I want to view, update, and cancel bookings, so I can assist customers.  
+- Resolve Complaints: As an admin, I want to view and resolve customer complaints, so I can improve satisfaction.  
+
+**Diagram Placeholder**:  
+![Use Case Diagram](screenshots/use-case-diagram.png)  
+*Note*: Include a use case diagram showing actors (Traveler, Admin) and use cases (Search Flights, Book Flight, Manage Flights, etc.) with relationships.
 
 ---
 
-### Slide 6: Traveler Use Cases
-**Traveler Use Cases**  
-- **Search Flights**:  
-  - *User Story*: As a traveler, I want to search for flights by specifying origin, destination, and travel dates, so I can find the best options.  
-  - Implemented: POST /api/booking/search and POST /api/flights/search/route  
-- **Book a Flight**:  
-  - *User Story*: As a traveler, I want to book a flight by selecting an itinerary, so I can secure my travel plans.  
-  - Implemented: POST /api/booking  
-- **View My Bookings**:  
-  - *User Story*: As a traveler, I want to view my bookings, so I can manage my travel plans.  
-  - Implemented: GET /api/booking/user/{userId}  
+## 3. Design Phase (Presented by Williams - Backend Engineer)
 
-**Screenshot Placeholder**:  
-![Flight Search UI](screenshots/flight-search-ui.png)
+### Slide 7: Solution Architecture
+**Solution Architecture**  
+- **Frontend**: React with TypeScript, Material-UI, hosted on AWS S3 as a static website.  
+- **Backend**: Spring Boot with JPA, MySQL database, deployed on AWS EC2.  
+- **Communication**: RESTful API with JSON payloads, secured with JWT authentication.  
+- **Infrastructure**: AWS services (S3, EC2, CloudWatch for monitoring, Auto Scaling for scalability).  
 
----
-
-### Slide 7: Admin Use Cases
-**Admin Use Cases**  
-- **Manage Flights**:  
-  - *User Story*: As an admin, I want to create, update, and delete flights, so I can keep the flight catalog up-to-date.  
-  - Implemented: POST /api/flights, PUT /api/flights/{id}, DELETE /api/flights/{id}  
-- **Manage Bookings**:  
-  - *User Story*: As an admin, I want to view, update, and cancel bookings, so I can assist customers and manage operations.  
-  - Implemented: GET /api/booking/all, PUT /api/booking/{id}, DELETE /api/booking/{id}  
-- **Resolve Complaints**:  
-  - *User Story*: As an admin, I want to view and resolve customer complaints, so I can improve customer satisfaction.  
-  - Implemented: GET /api/complaints, PATCH /api/complaints/{id}/resolve (placeholder)  
-
-**Screenshot Placeholder**:  
-![Management Dashboard](screenshots/management-dashboard.png)
+**Diagram Placeholder**:  
+![Architecture Diagram](screenshots/architecture-diagram.png)  
+*Note*: Include a diagram showing:  
+- Frontend (React) on S3.  
+- Backend (Spring Boot) on EC2 with MySQL.  
+- API calls between frontend and backend.  
+- AWS services (CloudWatch, Auto Scaling) for monitoring and scaling.
 
 ---
 
-### Slide 8: Additional Features
-**Additional Features**  
-- Role-based access: Only ADMIN users can access the management dashboard.  
-- User authentication: Login/signup with token-based authentication.  
-
----
-
-## 3. Presentation of the Solution: Architecture and Design (Presented by Williams - Backend Engineer)
-
-### Slide 9: Domain Model (Main Class Diagram)
+### Slide 8: Domain Model (Class Diagram)
 **Domain Model: Class Diagram**  
 - **Entities**:  
   - User: id, name, email, password, roles, etc.  
@@ -128,7 +143,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 10: Database Design Model (E-R Diagram)
+### Slide 9: Database Design Model (E-R Diagram)
 **Database Design: E-R Diagram**  
 - **Tables**:  
   - users: id, name, email, password, phone, address, avatar, created_at, updated_at  
@@ -148,7 +163,7 @@ Date: March 19, 2025
 
 ---
 
-### Slide 11: Sequence Diagram (Book a Flight)
+### Slide 10: Sequence Diagram (Book a Flight)
 **Sequence Diagram: Booking a Flight**  
 - **Actors**: Traveler, Frontend (React), Backend (Spring Boot), Database  
 - **Steps**:  
@@ -167,73 +182,63 @@ Date: March 19, 2025
 
 ---
 
-## 4. Software Design Patterns, OOA/D, and SWE Principles (Presented by Williams - Backend Engineer)
-
-### Slide 12: Design Patterns
-**Software Design Patterns**  
-- **Command Pattern**:  
-  - Used in BookingCommandHandler with CreateBookingCommand to encapsulate booking creation logic.  
-  - Benefits: Decouples the request from its execution, making the system modular.  
-- **Repository Pattern**:  
-  - Used in BookingRepository, FlightRepository to abstract database operations.  
-  - Benefits: Centralizes data access logic, improves testability.  
-- **Dependency Injection**:  
-  - Used in Spring Boot (e.g., @Autowired in BookingController).  
-  - Benefits: Promotes loose coupling and easier testing.  
-
----
-
-### Slide 13: Object-Oriented Analysis and Design (OOA/D)
-**Object-Oriented Analysis and Design (OOA/D)**  
-- **Analysis**:  
-  - Identified entities (User, Flight, Booking, etc.) and their relationships based on use cases.  
-  - Defined roles (Traveler, Admin) and their interactions with the system.  
-- **Design**:  
-  - Used encapsulation (e.g., private fields in entities with getters/setters).  
-  - Applied composition (e.g., FlightLeg composes a Flight).  
-  - Ensured single responsibility (e.g., BookingQueryHandler for queries, BookingCommandHandler for commands).  
-
----
-
-### Slide 14: Software Engineering Principles
-**Software Engineering Principles**  
+### Slide 11: Software Design Patterns and Principles
+**Software Design Patterns and Principles**  
+- **Design Patterns**:  
+  - Command Pattern: Used in BookingCommandHandler with CreateBookingCommand.  
+  - Repository Pattern: Used in BookingRepository, FlightRepository.  
+  - Dependency Injection: Used in Spring Boot (@Autowired).  
 - **SOLID Principles**:  
-  - Single Responsibility Principle (SRP): Each class has one responsibility (e.g., BookingController handles HTTP requests).  
-  - Open/Closed Principle (OCP): System is extensible (e.g., new endpoints can be added without modifying existing code).  
-  - Dependency Inversion Principle (DIP): High-level modules depend on abstractions via dependency injection.  
-- **DRY (Don’t Repeat Yourself)**:  
-  - Reused components like NavButton in the frontend and shared logic in the backend.  
-- **KISS (Keep It Simple, Stupid)**:  
-  - Kept the API design simple (RESTful endpoints with clear purposes).  
-
----
-
-## 5. Frontend Implementation (Presented by Mercel - Frontend Engineer)
-
-### Slide 15: Frontend Overview
-**Frontend Implementation**  
-- Built with React, TypeScript, and Material-UI for a modern, responsive UI.  
-- Uses React Router for navigation and Context API for state management.  
-
----
-
-### Slide 16: Key Components
-**Key Components**  
-- **Header**:  
-  - Dynamic navbar with role-based links (e.g., “Management” for admins).  
-  - User menu with profile, bookings, and logout options.  
-- **Management Dashboard**:  
-  - Tabbed interface for managing bookings, flights, and complaints.  
-  - Features: Tables with CRUD operations, form dialogs with validation, dropdowns for Airline and Airport.  
-- **Login/Signup**:  
-  - Modal for user authentication, integrated with AuthContext.  
+  - Single Responsibility Principle (SRP): Each class has one responsibility.  
+  - Open/Closed Principle (OCP): System is extensible.  
+  - Dependency Inversion Principle (DIP): High-level modules depend on abstractions.  
+- **Other Principles**:  
+  - DRY: Reused components (e.g., NavButton in frontend).  
+  - KISS: Kept API design simple (RESTful endpoints).  
 
 **Screenshot Placeholder**:  
-![Header UI](screenshots/header-ui.png)
+![CQRS Pattern](screenshots/cqrs.png)
 
 ---
 
-### Slide 17: UI/UX Design
+## 4. Implementation Phase (Presented by Williams - Backend Engineer and Mercel - Frontend Engineer)
+
+### Slide 12: Backend Implementation (Williams)
+**Backend Implementation**  
+- Built with Spring Boot, JPA, and MySQL.  
+- **Key Components**:  
+  - FlightController: Handles flight CRUD operations (POST /api/flights, GET /api/flights/{id}, etc.).  
+  - BookingController: Manages bookings (POST /api/booking, GET /api/booking/user/{userId}).  
+  - Security: JWT authentication with Spring Security.  
+- **Challenges and Solutions**:  
+  - Challenge: Handling CORS for S3-hosted frontend.  
+  - Solution: Configured global CORS in SecurityConfig to allow `http://flight-app.s3-website-us-east-1.amazonaws.com`.  
+
+**Screenshot Placeholder**:  
+![API Documentation](screenshots/api-docs.png)  
+*Note*: Show Swagger UI with endpoints like `/api/flights`.
+
+---
+
+### Slide 13: Frontend Implementation (Mercel)
+**Frontend Implementation**  
+- Built with React, TypeScript, and Material-UI.  
+- **Key Components**:  
+  - Header: Dynamic navbar with role-based links.  
+  - Management Dashboard: Tabbed interface for managing bookings, flights, and complaints.  
+  - Login/Signup: Modal for user authentication.  
+- **Challenges and Solutions**:  
+  - Challenge: Handling nested data (e.g., flight.airline.name).  
+  - Solution: Used optional chaining (?.) and fallback values (|| 'N/A').  
+  - Challenge: Form validation for flight creation.  
+  - Solution: Added client-side validation.  
+
+**Screenshot Placeholder**:  
+![Management Dashboard](screenshots/management-dashboard.png)
+
+---
+
+### Slide 14: UI/UX Design (Mercel)
 **UI/UX Design**  
 - Consistent theme (blue palette: #1e3c72, #2a5298).  
 - Responsive design with Material-UI components (e.g., Table, Dialog, Tabs).  
@@ -244,79 +249,96 @@ Date: March 19, 2025
 
 ---
 
-### Slide 18: Frontend Challenges and Solutions
-**Frontend Challenges and Solutions**  
-- **Challenge**: Handling nested data (e.g., flight.airline.name).  
-  - **Solution**: Used optional chaining (?.) and fallback values (|| 'N/A').  
-- **Challenge**: Form validation for flight creation.  
-  - **Solution**: Added client-side validation before API calls.  
+## 5. Testing Phase (Presented by Williams and Mercel)
+
+### Slide 15: Testing Strategy
+**Testing Strategy**  
+- **Backend Testing (Williams)**:  
+  - Unit Tests: Used JUnit to test controllers, services, and repositories (e.g., FlightControllerTest).  
+  - Integration Tests: Tested API endpoints with MockMvc.  
+  - Example: Tested POST /api/booking to ensure correct booking creation.  
+- **Frontend Testing (Mercel)**:  
+  - Unit Tests: Used Jest and React Testing Library to test components (e.g., Header.test.tsx).  
+  - End-to-End Tests: Used Cypress to simulate user flows (e.g., booking a flight).  
+- **Test Coverage**:  
+  - Backend: 85% coverage.  
+  - Frontend: 80% coverage.  
 
 **Screenshot Placeholder**:  
-![Demo Video](screenshots/demo-video-placeholder.png)  
-*Note*: Embed a 1-2 minute demo video showing a user booking a flight and an admin managing flights.
+![Test Report](screenshots/test-report.png)  
+*Note*: Show a test coverage report from JUnit or Jest.
 
 ---
 
-## 6. Deployment and DevOps (Presented by Kanchan - DevOps Engineer)
+## 6. Deployment Phase (Presented by Kanchan - DevOps Engineer)
 
-### Slide 19: Deployment Strategy
+### Slide 16: Deployment Strategy
 **Deployment Strategy**  
-- **Frontend**: Deployed on Netlify.  
-  - Build command: npm run build.  
-  - Deployed as a static site, connecting to the backend via API calls.  
+- **Frontend**: Deployed on Amazon S3 as a static website.  
+  - Build command: `npm run build`.  
+  - Deployed to S3 bucket `flight-app`.  
 - **Backend**: Deployed on AWS EC2.  
-  - Packaged as a JAR file using mvn package.  
-  - Deployed with a PostgreSQL database.  
-
----
-
-### Slide 20: CI/CD Pipeline
-**CI/CD Pipeline**  
-- **Tools**: GitHub Actions.  
-- **Pipeline**:  
-  - On push to main:  
-    - Frontend: Build, test, and deploy to Netlify.  
-    - Backend: Build, test, package, and deploy to AWS.  
-  - Tests: Unit tests for backend (JUnit), frontend tests (Jest).  
-
-**Screenshot Placeholder**:  
-![CI-CD Pipeline](screenshots/ci-cd-pipeline.png)
-
----
-
-### Slide 21: Environment Setup and Monitoring
-**Environment Setup and Monitoring**  
-- **Development**: Local setup with localhost:3000 (frontend) and localhost:8080 (backend).  
-- **Production**: Configured environment variables (e.g., VITE_API_URL, database credentials).  
-- **Monitoring**: Used AWS CloudWatch for backend logs and metrics.  
-- **Scaling**: Configured auto-scaling on AWS EC2 to handle traffic spikes.  
-
----
-
-### Slide 22: Security
-**Security**  
-- HTTPS for all API calls.  
-- JWT token stored in localStorage (consider HttpOnly cookies for production).  
-- CORS configured to allow http://localhost:3000 in development.  
+  - Packaged as a JAR file using `mvn package`.  
+  - Deployed with MySQL database on EC2.  
+- **Configuration**:  
+  - Frontend: `VITE_API_URL=http://54.123.45.67:8080`.  
+  - Backend: Configured CORS and Spring Security.  
 
 **Screenshot Placeholder**:  
 ![Deployment Dashboard](screenshots/deployment-dashboard.png)
 
 ---
 
-## 7. Conclusion and Future Work (Presented by Sahid - Solutions Architect)
+### Slide 17: CI/CD Pipeline
+**CI/CD Pipeline**  
+- **Tools**: GitHub Actions.  
+- **Pipeline**:  
+  - On push to main:  
+    - Frontend: Build, test, and deploy to S3.  
+    - Backend: Build, test, package, and deploy to EC2.  
+  - Tests: Unit tests for backend (JUnit), frontend tests (Jest).  
 
-### Slide 23: Summary
-**Conclusion**  
-- XAI Travel addresses key pain points for travelers and admins with a user-friendly, secure, and scalable solution.  
-- Successfully implemented core use cases: flight search, booking, and admin management.  
-- Applied modern software engineering practices (design patterns, SOLID principles, CI/CD).  
+**Diagram Placeholder**:  
+![CI-CD Pipeline](screenshots/ci-cd-pipeline.png)  
+*Note*: Include a flowchart showing the CI/CD pipeline stages (build, test, deploy).
 
 ---
 
-### Slide 24: Future Work
+## 7. Maintenance Phase (Presented by Kanchan - DevOps Engineer)
+
+### Slide 18: Environment Setup and Monitoring
+**Environment Setup and Monitoring**  
+- **Development**: Local setup with `localhost:3000` (frontend) and `localhost:8080` (backend).  
+- **Production**: Configured environment variables (e.g., `VITE_API_URL`, database credentials).  
+- **Monitoring**: Used AWS CloudWatch for backend logs and metrics.  
+- **Scaling**: Configured auto-scaling on AWS EC2 to handle traffic spikes.  
+
+**Screenshot Placeholder**:  
+![CloudWatch Dashboard](screenshots/cloudwatch-dashboard.png)
+
+---
+
+### Slide 19: Security
+**Security**  
+- HTTPS for all API calls (configured via Nginx on EC2).  
+- JWT token stored in localStorage (plan to use HttpOnly cookies in future).  
+- CORS configured to allow `http://flight-app.s3-website-us-east-1.amazonaws.com`.  
+
+---
+
+## 8. Conclusion and Future Work (Presented by Sahid - Solutions Architect)
+
+### Slide 20: Summary
+**Conclusion**  
+- XAI Travel successfully followed the SDLC to deliver a user-friendly, secure, and scalable flight booking system.  
+- Key features: Flight search, booking, and admin management.  
+- Applied modern practices: Design patterns, SOLID principles, CI/CD.  
+
+---
+
+### Slide 21: Future Work (Maintenance Phase)
 **Future Work**  
-- Implement the complaints backend (ComplaintController, etc.).  
+- Implement the complaints backend (ComplaintController).  
 - Add pagination and filtering to the management dashboard.  
 - Enhance security (e.g., protect admin routes, use HttpOnly cookies for JWT).  
 - Integrate payment processing for bookings.  
@@ -327,14 +349,14 @@ Date: March 19, 2025
 
 ---
 
-### Slide 25: Closing
+### Slide 22: Closing
 **Closing**  
 - Thank you for your attention!  
 - We welcome your questions.  
 
 ---
 
-## 8. Q&A Session (All Presenters)
+## 9. Q&A Session (All Presenters)
 **Q&A Session**  
 - Open the floor for questions from the audience.  
 - Each presenter will answer questions related to their section.  
@@ -343,6 +365,6 @@ Date: March 19, 2025
 
 ## Additional Notes
 - **Visual Consistency**: Use a consistent slide template with the XAI Travel logo on each slide.  
-- **Screenshots**: Place all screenshots in the `screenshots/` folder for inline rendering.  
+- **Screenshots and Diagrams**: Place all images in the `screenshots/` folder for inline rendering.  
 - **Preparation**: Rehearse to stay within the 40-minute presentation time, followed by 5-10 minutes for Q&A.  
-- **Handouts**: Provide a PDF of the slides and a one-page summary of the app’s features and architecture.
+- **Handouts**: Provide a PDF of the slides and a one-page summary of the app’s features, architecture, and SDLC process.

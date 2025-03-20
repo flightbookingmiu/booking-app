@@ -10,7 +10,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Button,
   IconButton,
   Dialog,
@@ -50,12 +49,18 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   marginTop: theme.spacing(3),
   borderRadius: '8px',
   boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+  background: 'linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%)',
 }));
 
 // Interfaces based on backend entities
+interface UserDetails {
+  email: string;
+}
+
 interface Booking {
   id: string;
   userId: string;
+  userDetails: UserDetails; // Added to match backend response
   flightLegs: { flight: { id: string } }[];
   status: string;
   createdAt: string;
@@ -114,9 +119,9 @@ const Management: React.FC = () => {
   const [newBooking, setNewBooking] = useState({ userId: '', flightId: '' });
   const [newFlight, setNewFlight] = useState({
     flightNumber: '',
-    airline: '' as string | Airline,
-    origin: '' as string | Airport,
-    destination: '' as string | Airport,
+    airlineId: '', // Store as string (ID)
+    originId: '', // Store as string (ID)
+    destinationId: '', // Store as string (ID)
     departure: '',
     arrival: '',
     duration: 0,
@@ -153,11 +158,12 @@ const Management: React.FC = () => {
         method: 'GET',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to fetch bookings');
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data: Booking[] = await response.json();
       setBookings(data);
     } catch (err) {
       setError('Error fetching bookings');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -170,11 +176,12 @@ const Management: React.FC = () => {
         method: 'GET',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to fetch flights');
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data: Flight[] = await response.json();
       setFlights(data);
     } catch (err) {
       setError('Error fetching flights');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -187,11 +194,12 @@ const Management: React.FC = () => {
         method: 'GET',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to fetch complaints');
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data: Complaint[] = await response.json();
       setComplaints(data);
     } catch (err) {
       setError('Error fetching complaints');
+      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -203,11 +211,12 @@ const Management: React.FC = () => {
         method: 'GET',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to fetch airlines');
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data: Airline[] = await response.json();
       setAirlines(data);
     } catch (err) {
       setError('Error fetching airlines');
+      console.error(err);
     }
   };
 
@@ -217,11 +226,12 @@ const Management: React.FC = () => {
         method: 'GET',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to fetch airports');
-      const data = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const data: Airport[] = await response.json();
       setAirports(data);
     } catch (err) {
       setError('Error fetching airports');
+      console.error(err);
     }
   };
 
@@ -237,13 +247,15 @@ const Management: React.FC = () => {
         headers: getHeaders(),
         body: JSON.stringify({ userId: newBooking.userId, flightId: newBooking.flightId }),
       });
-      if (!response.ok) throw new Error('Failed to create booking');
-      const createdBooking = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const createdBooking: Booking = await response.json();
       setBookings([...bookings, createdBooking]);
       setOpenBookingDialog(false);
       setNewBooking({ userId: '', flightId: '' });
+      setError(null);
     } catch (err) {
       setError('Error creating booking');
+      console.error(err);
     }
   };
 
@@ -255,13 +267,15 @@ const Management: React.FC = () => {
         headers: getHeaders(),
         body: JSON.stringify(editingBooking),
       });
-      if (!response.ok) throw new Error('Failed to update booking');
-      const updatedBooking = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const updatedBooking: Booking = await response.json();
       setBookings(bookings.map((b) => (b.id === updatedBooking.id ? updatedBooking : b)));
       setOpenBookingDialog(false);
       setEditingBooking(null);
+      setError(null);
     } catch (err) {
       setError('Error updating booking');
+      console.error(err);
     }
   };
 
@@ -272,10 +286,12 @@ const Management: React.FC = () => {
         method: 'DELETE',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to delete booking');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       setBookings(bookings.filter((b) => b.id !== id));
+      setError(null);
     } catch (err) {
       setError('Error deleting booking');
+      console.error(err);
     }
   };
 
@@ -283,9 +299,9 @@ const Management: React.FC = () => {
   const handleCreateFlight = async () => {
     if (
       !newFlight.flightNumber ||
-      !newFlight.airline ||
-      !newFlight.origin ||
-      !newFlight.destination ||
+      !newFlight.airlineId ||
+      !newFlight.originId ||
+      !newFlight.destinationId ||
       !newFlight.departure ||
       !newFlight.arrival ||
       newFlight.duration <= 0 ||
@@ -298,9 +314,9 @@ const Management: React.FC = () => {
     try {
       const flightPayload = {
         flightNumber: newFlight.flightNumber,
-        airline: typeof newFlight.airline === 'string' ? { id: newFlight.airline } : newFlight.airline,
-        origin: typeof newFlight.origin === 'string' ? { id: newFlight.origin } : newFlight.origin,
-        destination: typeof newFlight.destination === 'string' ? { id: newFlight.destination } : newFlight.destination,
+        airline: { id: newFlight.airlineId },
+        origin: { id: newFlight.originId },
+        destination: { id: newFlight.destinationId },
         departure: newFlight.departure,
         arrival: newFlight.arrival,
         duration: newFlight.duration,
@@ -312,23 +328,25 @@ const Management: React.FC = () => {
         headers: getHeaders(),
         body: JSON.stringify(flightPayload),
       });
-      if (!response.ok) throw new Error('Failed to create flight');
-      const createdFlight = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const createdFlight: Flight = await response.json();
       setFlights([...flights, createdFlight]);
       setOpenFlightDialog(false);
       setNewFlight({
         flightNumber: '',
-        airline: '',
-        origin: '',
-        destination: '',
+        airlineId: '',
+        originId: '',
+        destinationId: '',
         departure: '',
         arrival: '',
         duration: 0,
         price: 0,
         seatsAvailable: 0,
       });
+      setError(null);
     } catch (err) {
       setError('Error creating flight');
+      console.error(err);
     }
   };
 
@@ -337,22 +355,24 @@ const Management: React.FC = () => {
     try {
       const flightPayload = {
         ...editingFlight,
-        airline: typeof editingFlight.airline === 'string' ? { id: editingFlight.airline } : editingFlight.airline,
-        origin: typeof editingFlight.origin === 'string' ? { id: editingFlight.origin } : editingFlight.origin,
-        destination: typeof editingFlight.destination === 'string' ? { id: editingFlight.destination } : editingFlight.destination,
+        airline: { id: editingFlight.airline.id },
+        origin: { id: editingFlight.origin.id },
+        destination: { id: editingFlight.destination.id },
       };
       const response = await fetch(`${apiUrlStem}/api/flights/${editingFlight.id}`, {
         method: 'PUT',
         headers: getHeaders(),
         body: JSON.stringify(flightPayload),
       });
-      if (!response.ok) throw new Error('Failed to update flight');
-      const updatedFlight = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const updatedFlight: Flight = await response.json();
       setFlights(flights.map((f) => (f.id === updatedFlight.id ? updatedFlight : f)));
       setOpenFlightDialog(false);
       setEditingFlight(null);
+      setError(null);
     } catch (err) {
       setError('Error updating flight');
+      console.error(err);
     }
   };
 
@@ -363,10 +383,12 @@ const Management: React.FC = () => {
         method: 'DELETE',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to delete flight');
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
       setFlights(flights.filter((f) => f.id !== id));
+      setError(null);
     } catch (err) {
       setError('Error deleting flight');
+      console.error(err);
     }
   };
 
@@ -377,11 +399,13 @@ const Management: React.FC = () => {
         method: 'PATCH',
         headers: getHeaders(),
       });
-      if (!response.ok) throw new Error('Failed to resolve complaint');
-      const updatedComplaint = await response.json();
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      const updatedComplaint: Complaint = await response.json();
       setComplaints(complaints.map((c) => (c.id === updatedComplaint.id ? updatedComplaint : c)));
+      setError(null);
     } catch (err) {
       setError('Error resolving complaint');
+      console.error(err);
     }
   };
 
@@ -438,12 +462,12 @@ const Management: React.FC = () => {
               Add Booking
             </Button>
           </Box>
-          <StyledTableContainer component={Paper}>
+          <StyledTableContainer>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell>User ID</TableCell>
+                  <TableCell>User Email</TableCell>
                   <TableCell>Flight ID</TableCell>
                   <TableCell>Booking Date</TableCell>
                   <TableCell>Status</TableCell>
@@ -454,7 +478,7 @@ const Management: React.FC = () => {
                 {bookings.map((booking) => (
                   <TableRow key={booking.id}>
                     <TableCell>{booking.id}</TableCell>
-                    <TableCell>{booking.userDetails.email}</TableCell>
+                    <TableCell>{booking.userDetails?.email || 'N/A'}</TableCell>
                     <TableCell>{booking.flightLegs?.[0]?.flight?.id || 'N/A'}</TableCell>
                     <TableCell>{new Date(booking.createdAt).toLocaleString()}</TableCell>
                     <TableCell>
@@ -497,7 +521,7 @@ const Management: React.FC = () => {
               Add Flight
             </Button>
           </Box>
-          <StyledTableContainer component={Paper}>
+          <StyledTableContainer>
             <Table>
               <TableHead>
                 <TableRow>
@@ -551,7 +575,7 @@ const Management: React.FC = () => {
       {/* Complaints Tab */}
       {tabValue === 2 && !loading && (
         <Box>
-          <StyledTableContainer component={Paper}>
+          <StyledTableContainer>
             <Table>
               <TableHead>
                 <TableRow>
@@ -629,7 +653,7 @@ const Management: React.FC = () => {
           <Button
             onClick={editingBooking ? handleUpdateBooking : handleCreateBooking}
             variant="contained"
-            color="primary"
+            sx={{ backgroundColor: '#1e3c72', '&:hover': { backgroundColor: '#2a5298' } }}
           >
             {editingBooking ? 'Update' : 'Create'}
           </Button>
@@ -655,19 +679,11 @@ const Management: React.FC = () => {
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Airline</InputLabel>
             <Select
-              value={
-                editingFlight
-                  ? typeof editingFlight.airline === 'string'
-                    ? editingFlight.airline
-                    : editingFlight.airline?.id || ''
-                  : typeof newFlight.airline === 'string'
-                  ? newFlight.airline
-                  : newFlight.airline?.id || ''
-              }
+              value={editingFlight ? editingFlight.airline.id : newFlight.airlineId}
               onChange={(e) =>
                 editingFlight
-                  ? setEditingFlight({ ...editingFlight, airline: e.target.value })
-                  : setNewFlight({ ...newFlight, airline: e.target.value })
+                  ? setEditingFlight({ ...editingFlight, airline: { ...editingFlight.airline, id: e.target.value as string } })
+                  : setNewFlight({ ...newFlight, airlineId: e.target.value as string })
               }
             >
               {airlines.map((airline) => (
@@ -680,19 +696,11 @@ const Management: React.FC = () => {
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Origin Airport</InputLabel>
             <Select
-              value={
-                editingFlight
-                  ? typeof editingFlight.origin === 'string'
-                    ? editingFlight.origin
-                    : editingFlight.origin?.id || ''
-                  : typeof newFlight.origin === 'string'
-                  ? newFlight.origin
-                  : newFlight.origin?.id || ''
-              }
+              value={editingFlight ? editingFlight.origin.id : newFlight.originId}
               onChange={(e) =>
                 editingFlight
-                  ? setEditingFlight({ ...editingFlight, origin: e.target.value })
-                  : setNewFlight({ ...newFlight, origin: e.target.value })
+                  ? setEditingFlight({ ...editingFlight, origin: { ...editingFlight.origin, id: e.target.value as string } })
+                  : setNewFlight({ ...newFlight, originId: e.target.value as string })
               }
             >
               {airports.map((airport) => (
@@ -705,19 +713,11 @@ const Management: React.FC = () => {
           <FormControl fullWidth margin="normal" required>
             <InputLabel>Destination Airport</InputLabel>
             <Select
-              value={
-                editingFlight
-                  ? typeof editingFlight.destination === 'string'
-                    ? editingFlight.destination
-                    : editingFlight.destination?.id || ''
-                  : typeof newFlight.destination === 'string'
-                  ? newFlight.destination
-                  : newFlight.destination?.id || ''
-              }
+              value={editingFlight ? editingFlight.destination.id : newFlight.destinationId}
               onChange={(e) =>
                 editingFlight
-                  ? setEditingFlight({ ...editingFlight, destination: e.target.value })
-                  : setNewFlight({ ...newFlight, destination: e.target.value })
+                  ? setEditingFlight({ ...editingFlight, destination: { ...editingFlight.destination, id: e.target.value as string } })
+                  : setNewFlight({ ...newFlight, destinationId: e.target.value as string })
               }
             >
               {airports.map((airport) => (
@@ -802,7 +802,7 @@ const Management: React.FC = () => {
           <Button
             onClick={editingFlight ? handleUpdateFlight : handleCreateFlight}
             variant="contained"
-            color="primary"
+            sx={{ backgroundColor: '#1e3c72', '&:hover': { backgroundColor: '#2a5298' } }}
           >
             {editingFlight ? 'Update' : 'Create'}
           </Button>
