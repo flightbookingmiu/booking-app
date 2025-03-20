@@ -5,6 +5,7 @@ import edu.miu.cs.cs425.backend.application.commandhandler.BookingCommandHandler
 import edu.miu.cs.cs425.backend.application.query.FlightSearchQuery;
 import edu.miu.cs.cs425.backend.application.queryhandler.BookingQueryHandler;
 import edu.miu.cs.cs425.backend.domain.entity.Booking;
+import edu.miu.cs.cs425.backend.domain.entity.BookingStatus;
 import edu.miu.cs.cs425.backend.domain.entity.Flight;
 import edu.miu.cs.cs425.backend.domain.entity.FlightSearchResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/booking")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:1"}, allowedHeaders = "*", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:3000"}, allowedHeaders = "*", allowCredentials = "true")
 @Tag(name = "Booking API", description = "Endpoints for managing flight bookings")
 public class BookingController {
 
@@ -74,7 +75,6 @@ public class BookingController {
         return ResponseEntity.ok(result);
     }
 
-
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Booking>> getUserBookings(
             @Parameter(description = "ID of the user to retrieve bookings for", required = true)
@@ -100,6 +100,26 @@ public class BookingController {
     @PutMapping("/{id}")
     public ResponseEntity<Booking> updateBooking(@PathVariable Long id, @RequestBody Booking bookingDetails) {
         Booking updatedBooking = bookingCommandHandler.updateBooking(id, bookingDetails);
+        return ResponseEntity.ok(updatedBooking);
+    }
+
+    @Operation(summary = "Cancel a booking", description = "Cancels an existing booking by updating its status to CANCELLED")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Booking cancelled successfully"),
+            @ApiResponse(responseCode = "400", description = "Booking is already cancelled"),
+            @ApiResponse(responseCode = "404", description = "Booking not found")
+    })
+    @PutMapping("/{id}/cancel")
+    public ResponseEntity<Booking> cancelBooking(@PathVariable Long id) {
+        Booking booking = bookingQueryHandler.getBookingById(id);
+        if (booking == null) {
+            return ResponseEntity.notFound().build();
+        }
+        if (BookingStatus.CANCELLED.equals(booking.getStatus())) {
+            return ResponseEntity.badRequest().body(booking); // Already cancelled
+        }
+        booking.setStatus(BookingStatus.CANCELLED);
+        Booking updatedBooking = bookingCommandHandler.save(booking);
         return ResponseEntity.ok(updatedBooking);
     }
 

@@ -15,10 +15,12 @@
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/config/CustomJwtFilter.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/config/FilterConfig.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/config/JwtUtil.java
+/Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/config/SecurityConfig.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/AirlineRepository.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/AirportRepository.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/BookingRepository.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/FlightRepository.java
+/Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/RoleRepository.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/data/repository/UserRepository.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/Airline.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/Airport.java
@@ -29,6 +31,7 @@
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/FlightLeg.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/FlightSearchResult.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/Itinerary.java
+/Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/Role.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/RoundTripItinerary.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/User.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/domain/entity/UserDetails.java
@@ -38,6 +41,7 @@
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/dto/ItineraryRequest.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/dto/LoginRequest.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/dto/SignupRequest.java
+/Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/dto/UserCreationRequest.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/presentation/controller/AirlineController.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/presentation/controller/AirportController.java
 /Users/mercelvubangsi/Documents/MY DOCS/MIU/STUDIES/CS425 SWE/PROJECT/new/backend/src/main/java/edu/miu/cs/cs425/backend/presentation/controller/AuthController.java

@@ -6,13 +6,12 @@ import edu.miu.cs.cs425.backend.application.query.FlightSearchQuery;
 import edu.miu.cs.cs425.backend.application.query.GetFlightQuery;
 import edu.miu.cs.cs425.backend.application.queryhandler.FlightQueryHandler;
 import edu.miu.cs.cs425.backend.application.queryhandler.FlightSearchQueryHandler;
-import edu.miu.cs.cs425.backend.domain.entity.FlightSearchResult;
 import edu.miu.cs.cs425.backend.domain.entity.Booking;
 import edu.miu.cs.cs425.backend.domain.entity.Flight;
+import edu.miu.cs.cs425.backend.domain.entity.FlightSearchResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
 
 @Service
 public class BookingService {
@@ -20,8 +19,10 @@ public class BookingService {
     private final FlightQueryHandler flightQueryHandler;
     private final FlightSearchQueryHandler flightSearchQueryHandler;
 
-    public BookingService(BookingCommandHandler bookingCommandHandler, FlightQueryHandler flightQueryHandler,
-                          FlightSearchQueryHandler flightSearchQueryHandler) {
+    public BookingService(
+            BookingCommandHandler bookingCommandHandler,
+            FlightQueryHandler flightQueryHandler,
+            FlightSearchQueryHandler flightSearchQueryHandler) {
         this.bookingCommandHandler = bookingCommandHandler;
         this.flightQueryHandler = flightQueryHandler;
         this.flightSearchQueryHandler = flightSearchQueryHandler;
@@ -39,5 +40,15 @@ public class BookingService {
 
     public FlightSearchResult searchFlights(FlightSearchQuery query) {
         return flightSearchQueryHandler.handle(query);
+    }
+
+    // New method to get a booking by ID
+    public Booking getBookingById(Long id) {
+        return bookingCommandHandler.getBookingById(id);
+    }
+
+    // New method to save a booking
+    public Booking save(Booking booking) {
+        return bookingCommandHandler.save(booking);
     }
 }

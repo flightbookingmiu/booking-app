@@ -1,6 +1,5 @@
 edu/miu/cs/cs425/backend/application/query/FlightSearchQuery.class
 edu/miu/cs/cs425/backend/domain/entity/FlightSearchResult.class
-edu/miu/cs/cs425/backend/config/CorsConfig.class
 edu/miu/cs/cs425/backend/application/command/CreateBookingCommand.class
 edu/miu/cs/cs425/backend/config/JwtUtil.class
 edu/miu/cs/cs425/backend/service/AuthService.class
@@ -10,9 +9,11 @@ edu/miu/cs/cs425/backend/dto/ItineraryRequest.class
 edu/miu/cs/cs425/backend/domain/entity/User.class
 edu/miu/cs/cs425/backend/dto/FlightRequest.class
 edu/miu/cs/cs425/backend/domain/entity/Airport.class
+edu/miu/cs/cs425/backend/data/repository/RoleRepository.class
 edu/miu/cs/cs425/backend/config/FilterConfig.class
 edu/miu/cs/cs425/backend/data/repository/FlightRepository.class
 edu/miu/cs/cs425/backend/domain/entity/UserDetails.class
+edu/miu/cs/cs425/backend/domain/entity/Role.class
 edu/miu/cs/cs425/backend/service/AirlineService.class
 edu/miu/cs/cs425/backend/application/commandhandler/BookingCommandHandler.class
 edu/miu/cs/cs425/backend/data/repository/BookingRepository.class
@@ -45,8 +46,10 @@ edu/miu/cs/cs425/backend/controller/AuthController.class
 edu/miu/cs/cs425/backend/application/queryhandler/FlightRouteSearchQueryHandler.class
 edu/miu/cs/cs425/backend/domain/entity/Booking.class
 edu/miu/cs/cs425/backend/domain/entity/Flight.class
+edu/miu/cs/cs425/backend/dto/UserCreationRequest.class
 edu/miu/cs/cs425/backend/dto/BookingRequest.class
 edu/miu/cs/cs425/backend/service/BookingService.class
 edu/miu/cs/cs425/backend/application/query/FlightRouteSearchQuery.class
 edu/miu/cs/cs425/backend/application/queryhandler/BookingQueryHandler.class
+edu/miu/cs/cs425/backend/config/SecurityConfig.class
 edu/miu/cs/cs425/backend/application/queryhandler/FlightQueryHandler.class

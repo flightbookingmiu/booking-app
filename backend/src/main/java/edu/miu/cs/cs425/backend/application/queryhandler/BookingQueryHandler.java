@@ -105,4 +105,9 @@ public class BookingQueryHandler {
     public List<Booking> getAllBookings() {
         return bookingRepository.findAll();
     }
+
+    // New method to get a booking by ID
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id).orElse(null);
+    }
 }

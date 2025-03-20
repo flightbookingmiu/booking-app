@@ -132,4 +132,17 @@ public class BookingCommandHandler {
         }
         bookingRepository.deleteById(id);
     }
+
+// get booking by id
+    public Booking getBookingById(Long id) {
+        return bookingRepository.findById(id)
+               .orElseThrow(() -> new IllegalArgumentException("Booking with ID " + id + " not found"));
+    }
+
+    // New method to save a booking
+    @Transactional
+    public Booking save(Booking booking) {
+        return bookingRepository.save(booking);
+    }
+
 }
