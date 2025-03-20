@@ -327,6 +327,7 @@ Date: March 19, 2025
 - HTTPS for all API calls (configured via Nginx on EC2).  
 - JWT token stored in localStorage (plan to use HttpOnly cookies in future).  
 - CORS configured to allow `http://flight-app.s3-website-us-east-1.amazonaws.com`.  
+![CloudWatch Dashboard](screenshots/token.png)
 
 ---
 

@@ -132,7 +132,7 @@ const LoginSignupModal: React.FC<LoginSignupModalProps> = ({ open, onClose, onSu
         try {
           userData = await userResponse.json();
         } catch (parseError) {
-          console.error('Failed to parse user data:', parseError);
+          console.error('Failed to parse user data:');
           throw new Error('Invalid JSON response from server.');
         }
 
