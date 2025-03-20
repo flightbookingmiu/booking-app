@@ -190,61 +190,111 @@ const BookingProcess: React.FC = () => {
     return userDetails.firstName && userDetails.lastName && userDetails.email && userDetails.phone && userDetails.address && userDetails.passportNumber;
   };
 
-  const generateReceipt = (bookingData: any, bookingId: string) => {
-    const doc = new jsPDF();
-    const companyInfo = {
-      name: "xAI Travel",
-      address: "123 Galaxy Lane, Universe City, Earth",
-      phone: "1-800-XAI-FLY",
-      email: "support@xaitravel.com",
-    };
+// Utility function to generate a random PRN
+const generatePRN = (): string => {
+  const prefix = "XAI-"; // Prefix for the PRN
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; // Alphanumeric characters
+  const length = 8; // Length of the random part of the PRN
+  let randomPart = "";
 
-    doc.setFillColor(30, 60, 114);
-    doc.rect(0, 0, 210, 40, 'F');
-    doc.setFontSize(22);
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.text(companyInfo.name, 60, 20);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text(companyInfo.address, 60, 28);
-    doc.text(`Phone: ${companyInfo.phone} | Email: ${companyInfo.email}`, 60, 34);
+  // Generate a random 8-character string
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    randomPart += characters[randomIndex];
+  }
+
+  return `${prefix}${randomPart}`; // e.g., "XAI-ABCD1234"
+};
+
+const generateReceipt = (bookingData: any, bookingId: string) => {
+  const doc = new jsPDF();
+  const companyInfo = {
+    name: "xAI Travel",
+    address: "123 Galaxy Lane, Universe City, Earth",
+    phone: "1-800-XAI-FLY",
+    email: "support@xaitravel.com",
+  };
+
+  // Generate a unique PRN for this ticket
+  const prn = generatePRN();
+
+  // Header Section
+  doc.setFillColor(30, 60, 114);
+  doc.rect(0, 0, 210, 40, 'F');
+  doc.setFontSize(22);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text(companyInfo.name, 60, 20);
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text(companyInfo.address, 60, 28);
+  doc.text(`Phone: ${companyInfo.phone} | Email: ${companyInfo.email}`, 60, 34);
+  doc.setTextColor(0, 0, 0);
+
+  doc.setDrawColor(255, 204, 0);
+  doc.setLineWidth(1);
+  doc.line(20, 42, 190, 42);
+
+  // Ticket Owner Section (with PRN)
+  let yPos = 50;
+  doc.setFillColor(240, 248, 255);
+  doc.rect(20, yPos, 170, 40, 'F'); // Increased height to accommodate PRN
+  doc.setFontSize(16);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text("Ticket Owner", 25, yPos + 8);
+  doc.setFontSize(10);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Name: ${bookingData.userDetails.firstName} ${bookingData.userDetails.lastName}`, 25, yPos + 15);
+  doc.text(`Email: ${bookingData.userDetails.email}`, 25, yPos + 20);
+  doc.text(`Phone: ${bookingData.userDetails.phone}`, 25, yPos + 25);
+  doc.text(`Address: ${bookingData.userDetails.address}`, 25, yPos + 30);
+  doc.text(`Passport: ${bookingData.userDetails.passportNumber}`, 125, yPos + 15);
+  doc.setTextColor(0, 102, 204); // Blue color for PRN to make it stand out
+  doc.text(`PRN: ${prn}`, 125, yPos + 20); // Add PRN
+  doc.setTextColor(0, 0, 0);
+
+  // Flight Itinerary Section
+  yPos += 45; // Adjusted for the increased height of the Ticket Owner section
+  doc.setFillColor(245, 245, 220);
+  doc.rect(20, yPos, 170, 10, 'F');
+  doc.setFontSize(10);
+  doc.setTextColor(0, 102, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text("Flight Itinerary", 25, yPos + 7);
+  yPos += 15;
+
+  const isRoundTrip = 'outbound' in flight;
+  const itinerary = isRoundTrip ? flight.outbound : flight;
+  const returnItinerary = isRoundTrip ? flight.returnTrip : null;
+
+  itinerary.flights.forEach((f: any, index: number) => {
+    doc.setFillColor(255, 245, 230);
+    doc.rect(20, yPos, 170, 30, 'F');
+    doc.setDrawColor(204, 204, 204);
+    doc.rect(20, yPos, 170, 30);
     doc.setTextColor(0, 0, 0);
-
-    doc.setDrawColor(255, 204, 0);
-    doc.setLineWidth(1);
-    doc.line(20, 42, 190, 42);
-
-    let yPos = 50;
-    doc.setFillColor(240, 248, 255);
-    doc.rect(20, yPos, 170, 35, 'F');
-    doc.setFontSize(16);
-    doc.setTextColor(0, 51, 102);
-    doc.setFont('helvetica', 'bold');
-    doc.text("Ticket Owner", 25, yPos + 8);
-    doc.setFontSize(10);
+    doc.text(`Leg ${index + 1}: ${getAirportCode(f.origin)} to ${getAirportCode(f.destination)}`, 25, yPos + 5);
+    doc.text(`Flight: ${f.flightNumber} (${f.airline?.name || 'Unknown'})`, 35, yPos + 10);
+    doc.text(`Depart: ${new Date(f.departure).toLocaleString()}`, 35, yPos + 15);
+    doc.text(`Arrive: ${new Date(f.arrival).toLocaleString()}`, 35, yPos + 20);
+    doc.text(`Duration: ${formatDuration(f.duration)}`, 125, yPos + 10);
+    doc.setTextColor(0, 153, 0);
+    doc.text(`Price: $${f.price}`, 125, yPos + 15);
     doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'normal');
-    doc.text(`Name: ${bookingData.userDetails.firstName} ${bookingData.userDetails.lastName}`, 25, yPos + 15);
-    doc.text(`Email: ${bookingData.userDetails.email}`, 25, yPos + 20);
-    doc.text(`Phone: ${bookingData.userDetails.phone}`, 25, yPos + 25);
-    doc.text(`Address: ${bookingData.userDetails.address}`, 25, yPos + 30);
-    doc.text(`Passport: ${bookingData.userDetails.passportNumber}`, 125, yPos + 15);
+    yPos += 35;
+  });
 
-    yPos += 40;
+  if (returnItinerary) {
     doc.setFillColor(245, 245, 220);
     doc.rect(20, yPos, 170, 10, 'F');
-    doc.setFontSize(10);
+    doc.setFontSize(14);
     doc.setTextColor(0, 102, 0);
-    doc.setFont('helvetica', 'normal');
-    doc.text("Flight Itinerary", 25, yPos + 7);
+    doc.text("Return Trip", 25, yPos + 7);
     yPos += 15;
 
-    const isRoundTrip = 'outbound' in flight;
-    const itinerary = isRoundTrip ? flight.outbound : flight;
-    const returnItinerary = isRoundTrip ? flight.returnTrip : null;
-
-    itinerary.flights.forEach((f: any, index: number) => {
+    returnItinerary.flights.forEach((f: any, index: number) => {
       doc.setFillColor(255, 245, 230);
       doc.rect(20, yPos, 170, 30, 'F');
       doc.setDrawColor(204, 204, 204);
@@ -260,65 +310,43 @@ const BookingProcess: React.FC = () => {
       doc.setTextColor(0, 0, 0);
       yPos += 35;
     });
+  }
 
-    if (returnItinerary) {
-      doc.setFillColor(245, 245, 220);
-      doc.rect(20, yPos, 170, 10, 'F');
-      doc.setFontSize(14);
-      doc.setTextColor(0, 102, 0);
-      doc.text("Return Trip", 25, yPos + 7);
-      yPos += 15;
+  // Extras Section
+  doc.setFillColor(240, 248, 255);
+  doc.rect(20, yPos, 170, 25, 'F');
+  doc.setFontSize(14);
+  doc.setTextColor(0, 51, 102);
+  doc.text("Extras", 25, yPos + 7);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`Fare Type: ${fareType}`, 25, yPos + 15);
+  doc.text(`Seat: ${selectedSeat}`, 25, yPos + 20);
+  yPos += 30;
 
-      returnItinerary.flights.forEach((f: any, index: number) => {
-        doc.setFillColor(255, 245, 230);
-        doc.rect(20, yPos, 170, 30, 'F');
-        doc.setDrawColor(204, 204, 204);
-        doc.rect(20, yPos, 170, 30);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`Leg ${index + 1}: ${getAirportCode(f.origin)} to ${getAirportCode(f.destination)}`, 25, yPos + 5);
-        doc.text(`Flight: ${f.flightNumber} (${f.airline?.name || 'Unknown'})`, 35, yPos + 10);
-        doc.text(`Depart: ${new Date(f.departure).toLocaleString()}`, 35, yPos + 15);
-        doc.text(`Arrive: ${new Date(f.arrival).toLocaleString()}`, 35, yPos + 20);
-        doc.text(`Duration: ${formatDuration(f.duration)}`, 125, yPos + 10);
-        doc.setTextColor(0, 153, 0);
-        doc.text(`Price: $${f.price}`, 125, yPos + 15);
-        doc.setTextColor(0, 0, 0);
-        yPos += 35;
-      });
-    }
+  // Total Amount Paid Section
+  doc.setFillColor(255, 228, 225);
+  doc.rect(20, yPos, 170, 20, 'F');
+  doc.setFontSize(14);
+  doc.setTextColor(204, 0, 0);
+  doc.text("Total Amount Paid", 25, yPos + 7);
+  doc.setFontSize(12);
+  doc.setTextColor(0, 153, 0);
+  doc.text(`$${flight.totalPrice}`, 25, yPos + 15);
+  doc.setTextColor(0, 0, 0);
+  yPos += 25;
 
-    doc.setFillColor(240, 248, 255);
-    doc.rect(20, yPos, 170, 25, 'F');
-    doc.setFontSize(14);
-    doc.setTextColor(0, 51, 102);
-    doc.text("Extras", 25, yPos + 7);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`Fare Type: ${fareType}`, 25, yPos + 15);
-    doc.text(`Seat: ${selectedSeat}`, 25, yPos + 20);
-    yPos += 30;
+  // Footer Section
+  doc.setFillColor(30, 60, 114);
+  doc.rect(0, 270, 210, 20, 'F');
+  doc.setFontSize(10);
+  doc.setTextColor(255, 255, 255);
+  doc.text("Thank you for choosing xAI Travel! Safe travels!", 20, 280);
+  doc.text(`Booking ID: ${bookingId}`, 150, 280, { align: 'right' });
 
-    doc.setFillColor(255, 228, 225);
-    doc.rect(20, yPos, 170, 20, 'F');
-    doc.setFontSize(14);
-    doc.setTextColor(204, 0, 0);
-    doc.text("Total Amount Paid", 25, yPos + 7);
-    doc.setFontSize(12);
-    doc.setTextColor(0, 153, 0);
-    doc.text(`$${flight.totalPrice}`, 25, yPos + 15);
-    doc.setTextColor(0, 0, 0);
-    yPos += 25;
-
-    doc.setFillColor(30, 60, 114);
-    doc.rect(0, 270, 210, 20, 'F');
-    doc.setFontSize(10);
-    doc.setTextColor(255, 255, 255);
-    doc.text("Thank you for choosing xAI Travel! Safe travels!", 20, 280);
-    doc.text(`Booking ID: ${bookingId}`, 150, 280, { align: 'right' });
-
-    const pdfBlob = doc.output('blob');
-    const url = URL.createObjectURL(pdfBlob);
-    setDownloadLink(url);
-  };
+  const pdfBlob = doc.output('blob');
+  const url = URL.createObjectURL(pdfBlob);
+  setDownloadLink(url);
+};
 
   const handleLoginSuccess = (loggedInUser: any) => {
     login(loggedInUser);

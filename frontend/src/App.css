@@ -12,6 +12,10 @@ html, body {
   padding: 0;
 }
 
+html {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
+}
+
 body {
   font-family: 'Helvetica', 'Arial', sans-serif;
   background: linear-gradient(135deg, #f5f7fa 0%, #e4e9f0 100%);
@@ -37,5 +41,3 @@ main {
   flex: 1;
   width: 100%;
 }
-
-/* ... rest of the styles (logo, card, etc.) remain unchanged ... */

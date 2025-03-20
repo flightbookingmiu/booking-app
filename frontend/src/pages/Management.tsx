@@ -24,12 +24,15 @@ import {
   MenuItem,
   InputLabel,
   FormControl,
+
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility'; // For View Details
+import CancelIcon from '@mui/icons-material/Cancel'; // For Cancel Booking
 import AddIcon from '@mui/icons-material/Add';
 import DoneIcon from '@mui/icons-material/Done';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAuth } from '../context/AuthContext';
 
 // Styled components
@@ -60,7 +63,7 @@ interface UserDetails {
 interface Booking {
   id: string;
   userId: string;
-  userDetails: UserDetails; // Added to match backend response
+  userDetails: UserDetails;
   flightLegs: { flight: { id: string } }[];
   status: string;
   createdAt: string;
@@ -112,6 +115,8 @@ const Management: React.FC = () => {
   // Dialog states
   const [openBookingDialog, setOpenBookingDialog] = useState(false);
   const [openFlightDialog, setOpenFlightDialog] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false); // New dialog for viewing details
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null); // For viewing details
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
   const [editingFlight, setEditingFlight] = useState<Flight | null>(null);
 
@@ -119,9 +124,9 @@ const Management: React.FC = () => {
   const [newBooking, setNewBooking] = useState({ userId: '', flightId: '' });
   const [newFlight, setNewFlight] = useState({
     flightNumber: '',
-    airlineId: '', // Store as string (ID)
-    originId: '', // Store as string (ID)
-    destinationId: '', // Store as string (ID)
+    airlineId: '',
+    originId: '',
+    destinationId: '',
     departure: '',
     arrival: '',
     duration: 0,
@@ -134,7 +139,7 @@ const Management: React.FC = () => {
   const getHeaders = () => {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Accept', 'application/json');
+    headers.append('Accept', '*/*');
     const token = localStorage.getItem('token');
     if (token) {
       headers.append('Authorization', `Bearer ${token}`);
@@ -279,18 +284,20 @@ const Management: React.FC = () => {
     }
   };
 
-  const handleDeleteBooking = async (id: string) => {
-    if (!window.confirm('Are you sure you want to delete this booking?')) return;
+  // New function to cancel a booking
+  const handleCancelBooking = async (id: string) => {
+    if (!window.confirm('Are you sure you want to cancel this booking?')) return;
     try {
-      const response = await fetch(`${apiUrlStem}/api/booking/${id}`, {
-        method: 'DELETE',
+      const response = await fetch(`${apiUrlStem}/api/booking/${id}/cancel`, {
+        method: 'PUT',
         headers: getHeaders(),
       });
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-      setBookings(bookings.filter((b) => b.id !== id));
+      const updatedBooking: Booking = await response.json();
+      setBookings(bookings.map((b) => (b.id === updatedBooking.id ? updatedBooking : b)));
       setError(null);
     } catch (err) {
-      setError('Error deleting booking');
+      setError('Error cancelling booking');
       console.error(err);
     }
   };
@@ -493,8 +500,19 @@ const Management: React.FC = () => {
                       >
                         <EditIcon color="primary" />
                       </IconButton>
-                      <IconButton onClick={() => handleDeleteBooking(booking.id)}>
-                        <DeleteIcon color="error" />
+                      <IconButton
+                        onClick={() => {
+                          setSelectedBooking(booking);
+                          setOpenDetailsDialog(true);
+                        }}
+                      >
+                        <VisibilityIcon color="info" />
+                      </IconButton>
+                      <IconButton
+                        onClick={() => handleCancelBooking(booking.id)}
+                        disabled={booking.status === 'CANCELLED'}
+                      >
+                        <CancelIcon color={booking.status === 'CANCELLED' ? 'disabled' : 'error'} />
                       </IconButton>
                     </TableCell>
                   </TableRow>
@@ -614,7 +632,7 @@ const Management: React.FC = () => {
         </Box>
       )}
 
-      {/* Booking Dialog */}
+      {/* Booking Dialog (for Create/Edit) */}
       <Dialog open={openBookingDialog} onClose={() => setOpenBookingDialog(false)} maxWidth="sm" fullWidth>
         <DialogTitle>{editingBooking ? 'Edit Booking' : 'Create Booking'}</DialogTitle>
         <DialogContent>
@@ -656,6 +674,37 @@ const Management: React.FC = () => {
             sx={{ backgroundColor: '#1e3c72', '&:hover': { backgroundColor: '#2a5298' } }}
           >
             {editingBooking ? 'Update' : 'Create'}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Booking Details Dialog (for Viewing) */}
+      <Dialog open={openDetailsDialog} onClose={() => setOpenDetailsDialog(false)} maxWidth="sm" fullWidth>
+        <DialogTitle>Booking Details</DialogTitle>
+        <DialogContent>
+          {selectedBooking && (
+            <Box>
+              <Typography variant="body1" gutterBottom>
+                <strong>ID:</strong> {selectedBooking.id}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>User Email:</strong> {selectedBooking.userDetails?.email || 'N/A'}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>Flight ID:</strong> {selectedBooking.flightLegs?.[0]?.flight?.id || 'N/A'}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>Booking Date:</strong> {new Date(selectedBooking.createdAt).toLocaleString()}
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                <strong>Status:</strong> {selectedBooking.status}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDetailsDialog(false)} color="secondary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>
